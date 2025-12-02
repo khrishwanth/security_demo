@@ -2,6 +2,7 @@ package com.example.security_demo;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -25,6 +26,8 @@ public class JwtService {
     
     public String generateToken(String username){
         Map<String,Object> claim = new HashMap<>();
+        claim.put("roles", List.of("USER"));   // Could have used direcyly claim.put("roles", "USER") Because Spring Security expects a collection of authorities.
+        //claim.put("isPremium", true);
         Date start = new Date(System.currentTimeMillis());
         Date end = new Date(System.currentTimeMillis() + 60*60*30);
          return Jwts.builder().claims().add(claim).subject(username).issuedAt(start).expiration(end).and().signWith(SECRET_KEY).compact();
@@ -40,6 +43,7 @@ public class JwtService {
         final Claims claims = extractAllClaims(token);
         return claimResolver.apply(claims);
     }
+
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()

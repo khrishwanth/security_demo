@@ -37,15 +37,16 @@ private customUserDetailsService service;
         }
       jwtService.get(token);
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            
             UserDetails userDetails = service.loadUserByUsername(username);
             if (jwtService.validateToken(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
                 authToken.setDetails(new WebAuthenticationDetailsSource()
                         .buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
-
         filterChain.doFilter(request, response);
     }
     
