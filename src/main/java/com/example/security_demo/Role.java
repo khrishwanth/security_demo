@@ -3,8 +3,6 @@ package com.example.security_demo;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 import io.jsonwebtoken.lang.Collections;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +19,9 @@ public enum Role {
     ;
     @Getter
     private final Set<Role_permissions> permissions;
+
+    @Getter
+    private List<Role> roles;
 
     // public List<SimpleGrantedAuthority> getAuthority(){
     //  return getPermissions() 
