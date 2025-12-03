@@ -19,17 +19,21 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 @RestController
+
 public class JwtService {
+
 
     private static final String SECRET = "mysupersecretkeymysupersecretkey12";
     private static final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes());
     
     public String generateToken(String username){
         Map<String,Object> claim = new HashMap<>();
-        claim.put("roles", List.of("USER"));   // Could have used direcyly claim.put("roles", "USER") Because Spring Security expects a collection of authorities.
-        //claim.put("isPremium", true);
+        Role Admin = Role.ADMIN;
+        Role User = Role.USER;
+        claim.put("roles", List.of(Admin , User));
+        // 1)claim.put("roles", List.of("USER"));   
         Date start = new Date(System.currentTimeMillis());
-        Date end = new Date(System.currentTimeMillis() + 60*60*30);
+        Date end = new Date(System.currentTimeMillis() + 1000*60*100);
          return Jwts.builder().claims().add(claim).subject(username).issuedAt(start).expiration(end).and().signWith(SECRET_KEY).compact();
     }
 

@@ -3,6 +3,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,8 +40,7 @@ public class registerservice {
           return "Username already exists so create a new name";  
         }
         user.setPassword(encoder.encode(user.getPassword()));
-        
-        user.setRole(Role.USER);
+         user.setRole(Role.ADMIN);
         repo.save(user);
         return "User registered successfully";
 }
@@ -61,6 +61,7 @@ public class registerservice {
           return repo.findAll();
          }
 
+@PreAuthorize("hasRole('ADMIN')")
 @GetMapping("/roles")
 public Collection<? extends GrantedAuthority> getRoles(
         @AuthenticationPrincipal UserDetails userDetails) {
@@ -70,6 +71,7 @@ public Collection<? extends GrantedAuthority> getRoles(
     }
     return userDetails.getAuthorities();
 }
+
          @DeleteMapping("del")
          public String del(){
           repo.deleteAll();
